@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 
 module.exports = asyncHandler(async (req, res) => {
     try {
-        console.log('test', req.files)
         if(!req.files) {
             res.send({
                 status: false,
@@ -14,6 +13,7 @@ module.exports = asyncHandler(async (req, res) => {
             
             //Use the mv() method to place the file in upload directory (i.e. "uploads")
             wav.mv('./uploads/' + wav.name + ".wav");
+            
 
             //send response
             res.send({

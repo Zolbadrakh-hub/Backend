@@ -5,7 +5,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const fs = require('fs');
-
+const { exec } = require('child_process')
+const asyncHandler = require('express-async-handler')
 
 // Аппын тохиргоог process.env рүү ачаалах
 dotenv.config({path: './config/config.env'});
@@ -25,25 +26,22 @@ app.use(express.json());
 app.use(require("./routes"));
 app.use("/uploads", express.static('uploads'));
 
-//audio file g awah
 
-const server = http.createServer(function(req, res){
-    let wav = __dirname + "/uploads/prince2.wav";
+//Command line
 
+exec('echo 94 > hello.txt', (error, stdout, stderr) => {
+    if(error) {
+        console.log( error)
+    }
+})
 
-    fs.access(wav, fs.constants.F_OK, err => {
-        console.log(`${wav} ${err ? "does not exist": "exists"}`);
-    });
-    fs.readFile(wav, function(err, content){
-        if(err){
-            res.writeHead(404, {"Content-type" : "multipart/form-data"});
-            res.end(content);
-        }
-    });
-});
+//Read txt file
+
+function readData(err, data) {
+    console.log(data);
+}
+fs.readFile('hello.txt', 'utf-8', readData);
+
 
 
 app.listen(process.env.PORT, console.log(`Express сэрвэр ${process.env.PORT} порт дээр аслаа...`))
-server.listen(8080, function() {
-    console.log('Server running on port 1234')
-})
